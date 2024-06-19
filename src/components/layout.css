@@ -88,3 +88,46 @@ body {
   background-color: #ecf0f1;
   overflow-y: auto;
 }
+
+
+.notification-badge {
+  color: #e74c3c;
+  border-radius: 10px;
+}
+
+/* Notification styles */
+.notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.notification {
+  background-color: #4caf50; /* Green background */
+  color: white; /* White text */
+  padding: 15px;
+  margin: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.6s, transform 0.6s;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.notification.hide {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.notification.error {
+  background-color: #f44336; /* Red background for errors */
+}
+
+.notification.info {
+  background-color: #2196f3; /* Blue background for info */
+}
+
+.notification.warning {
+  background-color: #ff9800; /* Orange background for warnings */
+}

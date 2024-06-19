@@ -1,10 +1,13 @@
 import React from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useNotification } from "./NotificationContext";
 import "./layout.css";
+import imageLogo from "./../../src/logo512.png";
 
 const Layout = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
+  const { newOrderCount } = useNotification();
 
   const handleLogout = async () => {
     try {
@@ -34,11 +37,7 @@ const Layout = () => {
           <div className="user-info">
             {user ? (
               <>
-                <img
-                  src="user-icon.jpg"
-                  alt="User Icon"
-                  className="user-icon"
-                />
+                <img src={imageLogo} alt="User Icon" className="user-icon" />
                 <span>
                   {user.name} ({user.role})
                 </span>
@@ -61,7 +60,14 @@ const Layout = () => {
               <Link to="/reviews">Reviews</Link>
             </li>
             <li>
-              <Link to="/orders">Orders</Link>
+              <Link to="/orders">
+                Orders{" "}
+                {newOrderCount > 0 && (
+                  <span className="notification-badge">
+                    (new: {newOrderCount})
+                  </span>
+                )}
+              </Link>
             </li>
           </ul>
           <button className="logout-button" onClick={handleLogout}>
@@ -72,6 +78,8 @@ const Layout = () => {
       <main className="main-content">
         <Outlet />
       </main>
+      <div className="notification-container"></div>{" "}
+      {/* Notification container */}
     </div>
   );
 };

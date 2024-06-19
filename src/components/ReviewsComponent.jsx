@@ -111,28 +111,34 @@ const ReviewsComponent = () => {
         return (
           <div className="review-card" key={review._id}>
             <div className="review-content">
-              <div className="user-name"> {review.user.name}</div>
-              <div className="rating">{"⭐".repeat(review.rating)}</div>
-              <p className="review-text">{review.review}</p>
-              <div className="review-details">
-                <span className="review-date">
-                  {new Date(review.createdAt).toLocaleDateString()}
-                </span>
-                <div className="product-details">
-                  <img
-                    src={product?.imageCover || "default-product.png"}
-                    alt={product?.name}
-                    className="product-image"
-                    onError={(e) => {
-                      e.target.src = "default-product.png";
-                    }}
-                  />
-                  <div className="product-info">
-                    <span className="product-name">{product?.name}</span>
-                    <span className="product-price">${product?.price}</span>
+              {review.user ? (
+                <>
+                  <div className="user-name"> {review.user.name}</div>
+                  <div className="rating">{"⭐".repeat(review.rating)}</div>
+                  <p className="review-text">{review.review}</p>
+                  <div className="review-details">
+                    <span className="review-date">
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </span>
+                    <div className="product-details">
+                      <img
+                        src={product?.imageCover || "default-product.png"}
+                        alt={product?.name}
+                        className="product-image"
+                        onError={(e) => {
+                          e.target.src = "default-product.png";
+                        }}
+                      />
+                      <div className="product-info">
+                        <span className="product-name">{product?.name}</span>
+                        <span className="product-price">${product?.price}</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </>
+              ) : (
+                <p className="review-text">User information is not available</p>
+              )}
             </div>
             <button
               className="delete-button"

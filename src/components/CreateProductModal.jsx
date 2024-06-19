@@ -7,7 +7,7 @@ const CreateProductModal = ({ show, onClose, onCreate }) => {
   const [categories, setCategories] = useState("fouta");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [imageCover, setImageCover] = useState("");
+  const [imageCover, setImageCover] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 

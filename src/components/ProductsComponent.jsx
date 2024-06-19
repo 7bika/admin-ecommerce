@@ -15,28 +15,28 @@ const ProductsComponent = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        return;
-      }
-
-      try {
-        const response = await axios.get("http://127.0.0.1:3000/api/products", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setProducts(response.data.data.documents);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-
     fetchProducts();
   }, []);
+
+  const fetchProducts = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      return;
+    }
+
+    try {
+      const response = await axios.get("http://127.0.0.1:3000/api/products", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setProducts(response.data.data.documents);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
 
   const handleDelete = async (id) => {
     const token = localStorage.getItem("token");
@@ -119,12 +119,18 @@ const ProductsComponent = () => {
     const token = localStorage.getItem("token");
 
     try {
+      const formData = new FormData();
+      Object.keys(newProduct).forEach((key) => {
+        formData.append(key, newProduct[key]);
+      });
+
       const response = await axios.post(
         "http://localhost:3000/api/products",
-        newProduct,
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -170,7 +176,7 @@ const ProductsComponent = () => {
               <td>
                 {editingProduct === product._id ? (
                   <input
-                    type="text"
+                    type="number"
                     value={editedPrice}
                     onChange={(e) => setEditedPrice(e.target.value)}
                   />

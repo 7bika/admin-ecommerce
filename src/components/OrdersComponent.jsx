@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaCheck, FaTrashAlt } from "react-icons/fa";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import { useNotification } from "./NotificationContext";
 import "./ordersComponent.css";
 
 const OrdersComponent = () => {
   const [orders, setOrders] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [orderToDelete, setOrderToDelete] = useState(null);
+  const { newOrderIds, markOrderAsViewed } = useNotification();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [ordersPerPage] = useState(10);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -40,7 +44,7 @@ const OrdersComponent = () => {
                     );
                     return {
                       ...item,
-                      product: productResponse.data.data,
+                      product: productResponse.data.data.product,
                     };
                   } catch (productError) {
                     console.error("Error fetching product:", productError);
@@ -56,6 +60,11 @@ const OrdersComponent = () => {
           })
         );
 
+        // Sort orders by date (newest to latest)
+        ordersWithProductDetails.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+
         setOrders(ordersWithProductDetails);
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -63,6 +72,23 @@ const OrdersComponent = () => {
     };
 
     fetchOrders();
+  }, []);
+
+  useEffect(() => {
+    const handleNewOrder = (newOrder) => {
+      setOrders((prevOrders) => [newOrder, ...prevOrders]);
+    };
+
+    const ws = new WebSocket("ws://127.0.0.1:3000");
+
+    ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      if (message.type === "NEW_ORDER") {
+        handleNewOrder(message.order);
+      }
+    };
+
+    return () => ws.close();
   }, []);
 
   const handleConfirm = async (id) => {
@@ -122,12 +148,26 @@ const OrdersComponent = () => {
     }
   };
 
-  console.log(orders, "ordres");
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
+
+  const handleOrderClick = (orderId) => {
+    markOrderAsViewed(orderId);
+  };
+
+  // Pagination logic
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(orders.length / ordersPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <div className="orders-container">
@@ -147,16 +187,27 @@ const OrdersComponent = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
-            <tr key={order._id}>
-              <td>{order._id}</td>
+          {currentOrders.map((order) => (
+            <tr
+              key={order._id}
+              className={newOrderIds.has(order._id) ? "new-order" : ""}
+              onClick={() => handleOrderClick(order._id)}
+            >
+              <td>
+                {order._id}{" "}
+                {newOrderIds.has(order._id) && (
+                  <span className="new-label">new</span>
+                )}
+              </td>
               <td>{order.user?.name}</td>
               <td>${order.totalPrice.toFixed(2)}</td>
               <td>{order.status}</td>
               <td>
                 {order.orderItems.map((item) => (
                   <div key={item._id}>
-                    {item.product.product.name} x {item.quantity}
+                    {item.product
+                      ? `${item.product.name} x ${item.quantity}`
+                      : "Product details were deleted"}
                   </div>
                 ))}
               </td>
@@ -166,13 +217,19 @@ const OrdersComponent = () => {
               <td className="actions">
                 <button
                   className="confirm-button"
-                  onClick={() => handleConfirm(order._id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleConfirm(order._id);
+                  }}
                 >
                   <FaCheck />
                 </button>
                 <button
                   className="delete-button"
-                  onClick={() => openDeleteModal(order._id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openDeleteModal(order._id);
+                  }}
                 >
                   <FaTrashAlt />
                 </button>
@@ -186,6 +243,15 @@ const OrdersComponent = () => {
         onClose={closeDeleteModal}
         onConfirm={confirmDelete}
       />
+      <ul className="pagination">
+        {pageNumbers.map((number) => (
+          <li key={number} className="page-item">
+            <a onClick={() => paginate(number)} href="#!" className="page-link">
+              {number}
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

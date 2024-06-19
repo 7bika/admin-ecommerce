@@ -1,18 +1,10 @@
-/* ordersComponent.css */
 .orders-container {
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 1200px;
-  margin: 0 auto;
+  margin: 20px;
 }
 
 .orders-title {
-  font-size: 24px;
-  margin-bottom: 20px;
   text-align: center;
-  color: #333;
+  margin-bottom: 20px;
 }
 
 .orders-table {
@@ -23,16 +15,13 @@
 
 .orders-table th,
 .orders-table td {
+  padding: 12px 15px;
   border: 1px solid #ddd;
-  padding: 12px;
   text-align: left;
 }
 
 .orders-table th {
-  background-color: #f4f4f4;
-  color: #333;
-  text-transform: uppercase;
-  font-size: 14px;
+  background-color: #f2f2f2;
 }
 
 .orders-table tbody tr:nth-child(even) {
@@ -41,132 +30,67 @@
 
 .orders-table tbody tr:hover {
   background-color: #f1f1f1;
-}
-
-.orders-table .actions {
-  display: flex;
-  gap: 10px;
+  cursor: pointer;
 }
 
 .confirm-button,
 .delete-button {
+  background: none;
   border: none;
-  padding: 8px 12px;
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 14px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .confirm-button {
-  background-color: #28a745;
-  color: #fff;
+  color: green;
 }
 
 .delete-button {
-  background-color: #dc3545;
-  color: #fff;
+  color: red;
 }
 
-.confirm-button:hover {
-  background-color: #218838;
+.new-label {
+  background-color: red;
+  color: white;
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 5px;
+  margin-left: 10px;
 }
 
-.delete-button:hover {
-  background-color: #c82333;
+.new-order .new-label {
+  background-color: red;
+  color: white;
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 5px;
+  margin-left: 10px;
 }
 
-.delete-modal-content {
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-/* ordersComponent.css */
-.orders-container {
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 1200px;
-  margin: 0 auto;
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
 }
 
-.orders-title {
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-align: center;
-  color: #333;
+.page-item {
+  margin: 0 5px;
 }
 
-.orders-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
-
-.orders-table th,
-.orders-table td {
+.page-link {
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #007bff;
   border: 1px solid #ddd;
-  padding: 12px;
-  text-align: left;
-}
-
-.orders-table th {
-  background-color: #f4f4f4;
-  color: #333;
-  text-transform: uppercase;
-  font-size: 14px;
-}
-
-.orders-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.orders-table tbody tr:hover {
-  background-color: #f1f1f1;
-}
-
-.orders-table .actions {
-  display: flex;
-  gap: 10px;
-}
-
-.confirm-button,
-.delete-button {
-  border: none;
-  padding: 8px 12px;
-  cursor: pointer;
   border-radius: 4px;
-  font-size: 14px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.confirm-button {
-  background-color: #28a745;
-  color: #fff;
+.page-link:hover {
+  background-color: #f2f2f2;
 }
 
-.delete-button {
-  background-color: #dc3545;
-  color: #fff;
-}
-
-.confirm-button:hover {
-  background-color: #218838;
-}
-
-.delete-button:hover {
-  background-color: #c82333;
-}
-
-.delete-modal-content {
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.page-item.active .page-link {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
 }

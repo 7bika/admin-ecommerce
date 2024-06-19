@@ -13,24 +13,27 @@ import ProductsComponent from "./components/ProductsComponent";
 import OrdersComponent from "./components/OrdersComponent";
 import PrivateRoute from "./components/PrivateRoute";
 import ReviewsComponent from "./components/ReviewsComponent";
+import { NotificationProvider } from "./components/NotificationContext"; // Import the notification context provider
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<PrivateRoute />}>
-          <Route path="/" element={<Layout />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="users" element={<UsersComponent />} />
-            <Route path="products" element={<ProductsComponent />} />
-            <Route path="reviews" element={<ReviewsComponent />} />
-            <Route path="orders" element={<OrdersComponent />} />
+    <NotificationProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<PrivateRoute />}>
+            <Route path="/" element={<Layout />}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="users" element={<UsersComponent />} />
+              <Route path="products" element={<ProductsComponent />} />
+              <Route path="reviews" element={<ReviewsComponent />} />
+              <Route path="orders" element={<OrdersComponent />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+    </NotificationProvider>
   );
 }
 
